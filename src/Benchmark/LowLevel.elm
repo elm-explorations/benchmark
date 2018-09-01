@@ -27,11 +27,8 @@ and we'll find a way to make your use case friendlier.
 
 -}
 
-{- TODO: import Elm.Kernel.Benchmark -}
-
-import Process
+import Elm.Kernel.Benchmark
 import Task exposing (Task)
-import Time
 
 
 {-| An operation to benchmark. Use [`operation`](#operation) to
@@ -45,9 +42,8 @@ type Operation
 to benchmark when given a unit (`()`.)
 -}
 operation : (() -> a) -> Operation
-operation _ =
-    {- TODO: Elm.Kernel.Benchmark.operation -}
-    Operation
+operation fn =
+    Elm.Kernel.Benchmark.operation fn
 
 
 
@@ -75,10 +71,7 @@ accurate to 1ms.
 -}
 sample : Int -> Operation -> Task Error Float
 sample n operation_ =
-    {- TODO: Elm.Kernel.Benchmark.sample n operation -}
-    Process.sleep 5
-        |> Task.andThen (\_ -> Time.now)
-        |> Task.map (Time.posixToMillis >> toFloat)
+    Elm.Kernel.Benchmark.sample n operation_
 
 
 {-| Warm up the JIT for a benchmarking run. You should call this

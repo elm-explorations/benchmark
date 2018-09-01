@@ -1,47 +1,42 @@
-var _BrianHicks$elm_benchmark$Native_Benchmark = (function() {
-  var getTimestamp =
-    typeof performance !== "undefined"
-      ? performance.now.bind(performance)
-      : Date.now;
+/*
+import Elm.Kernel.Scheduler exposing (binding, succeed, fail)
+import Benchmark.LowLevel as BL exposing (StackOverflow, UnknownError)
+*/
 
-  // sample : Int -> Operation -> Task Error Float
-  function sample(n, fn) {
-    return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback) {
-      var start = getTimestamp();
+var _Benchmark_getTimestamp =
+  typeof performance !== "undefined"
+    ? performance.now.bind(performance)
+    : Date.now;
 
-      try {
-        for (var i = 0; i < n; i++) {
-          fn();
-        }
-      } catch (error) {
-        if (error instanceof RangeError) {
-          callback(
-            _elm_lang$core$Native_Scheduler.fail({ ctor: "StackOverflow" })
-          );
-        } else {
-          callback(
-            _elm_lang$core$Native_Scheduler.fail({
-              ctor: "UnknownError",
-              _0: error.message
-            })
-          );
-        }
-        return;
+// sample : Int -> Operation -> Task Error Float
+var _Benchmark_sample = F2(function(n, fn) {
+  return __Scheduler_binding(function(callback) {
+    var start = _Benchmark_getTimestamp();
+
+    try {
+      for (var i = 0; i < n; i++) {
+        fn();
       }
+    } catch (error) {
+      if (error instanceof RangeError) {
+        callback(__Scheduler_fail(
+          __BL_StackOverflow
+        ));
+      } else {
+        callback(__Scheduler_fail(
+          __BL_UnknownError(error.message)
+        ));
+      }
+      return;
+    }
 
-      var end = getTimestamp();
+    var end = _Benchmark_getTimestamp();
 
-      callback(_elm_lang$core$Native_Scheduler.succeed(end - start));
-    });
-  }
+    callback(__Scheduler_succeed(end - start));
+  });
+});
 
-  // operation : (() -> a) -> Operation
-  function operation(thunk) {
-    return thunk;
-  }
-
-  return {
-    operation: operation,
-    sample: F2(sample)
-  };
-})();
+// operation : (() -> a) -> Operation
+function _Benchmark_operation(thunk) {
+  return thunk;
+}
