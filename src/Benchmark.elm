@@ -185,8 +185,8 @@ The default runner uses this function to find out if it should call
 
 -}
 done : Benchmark -> Bool
-done benchmark =
-    case benchmark of
+done benchmark_ =
+    case benchmark_ of
         Single _ _ status ->
             Status.progress status == 1
 
@@ -284,8 +284,8 @@ they make optimizations and try again for ever higher runs per second.
 
 -}
 step : Benchmark -> Task Never Benchmark
-step benchmark =
-    case benchmark of
+step benchmark_ =
+    case benchmark_ of
         Single name inner status ->
             stepLowLevel inner status
                 |> Task.map (Single name inner)
@@ -293,9 +293,9 @@ step benchmark =
         Series name benchmarks ->
             benchmarks
                 |> List.map
-                    (\( name, inner, status ) ->
+                    (\( name_, inner, status ) ->
                         stepLowLevel inner status
-                            |> Task.map (\status -> ( name, inner, status ))
+                            |> Task.map (\status_ -> ( name_, inner, status_ ))
                     )
                 |> Task.sequence
                 |> Task.map (Series name)

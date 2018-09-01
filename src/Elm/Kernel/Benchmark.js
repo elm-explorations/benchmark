@@ -4,7 +4,7 @@ var _BrianHicks$elm_benchmark$Native_Benchmark = (function() {
       ? performance.now.bind(performance)
       : Date.now;
 
-  // sample : Int -> Operation -> Task Error Time
+  // sample : Int -> Operation -> Task Error Float
   function sample(n, fn) {
     return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback) {
       var start = getTimestamp();

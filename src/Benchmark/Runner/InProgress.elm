@@ -4,7 +4,6 @@ import Benchmark.Reporting as Reporting exposing (Report(..))
 import Benchmark.Runner.Box as Box
 import Benchmark.Runner.Text as Text
 import Benchmark.Status as Status exposing (Status(..))
-import Color
 import Element exposing (..)
 import Element.Attributes exposing (..)
 import Style exposing (..)
@@ -104,7 +103,7 @@ filledPortion name status =
                     |> Status.progress
                     |> (*) 100
                     |> floor
-                    |> toString
+                    |> String.fromInt
                 )
             , attribute "aria-valuemin" "0"
             , attribute "aria-valuemax" "100"
@@ -133,8 +132,8 @@ styles =
     [ style Unstyled []
     , style Box Box.style
     , style Progress
-        [ Color.text (Color.rgb 248 248 248)
-        , Color.background (Color.rgb 87 171 226)
+        [ Color.text (Style.rgb (248 / 255) (248 / 255) (248 / 255))
+        , Color.background (Style.rgb (87 / 255) (171 / 255) (226 / 255))
         ]
     , style Status
         [ Font.size 14 ]

@@ -3,7 +3,7 @@ module Example exposing (dict, main, match)
 import Benchmark exposing (Benchmark)
 import Benchmark.Runner exposing (BenchmarkProgram, program)
 import Dict
-import Regex
+import Regex exposing (Regex)
 
 
 dict : Benchmark
@@ -18,10 +18,18 @@ dict =
         ]
 
 
+regex : Regex
+regex =
+    Regex.fromString "^a+"
+        |> Maybe.withDefault Regex.never
+
+
 match : Benchmark
 match =
     Benchmark.benchmark "regex match" <|
-        \_ -> Regex.contains (Regex.regex "^a+") "aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        \_ ->
+            Regex.contains regex
+                "aaaaaaaaaaaaaaaaaaaaaaaaaa"
 
 
 main : BenchmarkProgram

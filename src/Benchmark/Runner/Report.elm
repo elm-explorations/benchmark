@@ -1,32 +1,31 @@
-module Benchmark.Runner.Report exposing (Class(..), Variation(..), cell, goodnessOfFit, header, multiReport, percentChange, pointsFromStatus, report, reports, runsPerSecond, singleReport, styles, trendFromStatus, trendsFromStatuses, view, withDots)
+module Benchmark.Runner.Report exposing (Class(..), Variation(..), cell, goodnessOfFit, header, multiReport, percentChange, pointsFromStatus, report, reports, runsPerSecond, singleReport, styles, trendFromStatus, trendsFromStatuses, view)
 
 import Benchmark.Reporting as Reporting exposing (Report(..))
 import Benchmark.Runner.Box as Box
 import Benchmark.Runner.Humanize as Humanize
-import Benchmark.Runner.Plot as Plot
 import Benchmark.Runner.Text as Text
 import Benchmark.Samples as Samples exposing (Point)
 import Benchmark.Status as Status exposing (Status(..))
 import Element exposing (..)
 import Element.Attributes exposing (..)
+import Html.Attributes
 import Style exposing (..)
 import Style.Font as Font
 import Style.Sheet as Sheet
-import Time
 import Trend.Linear as Trend exposing (Quick, Trend)
 
 
 view : Report -> Element Class Variation msg
-view report =
-    report
+view report_ =
+    report_
         |> reports []
         |> (::) (Text.hero TextClass "Benchmark Report")
         |> column Unstyled []
 
 
 reports : List String -> Report -> List (Element Class Variation msg)
-reports reversedParents report =
-    case report of
+reports reversedParents report_ =
+    case report_ of
         Single name status ->
             [ singleReport
                 (List.reverse reversedParents)
@@ -75,7 +74,7 @@ multiReport parents name children =
             trendsFromStatuses statuses
                 |> Maybe.map
                     (\trends ->
-                        [ header Text "name" :: List.map (cell Text) (withDots names)
+                        [ header Text "name" :: List.map (text >> cell Text) names
                         , header Numeric "runs / second" :: List.map (runsPerSecond Numeric) trends
                         , List.map2 percentChange
                             trends
@@ -93,26 +92,6 @@ multiReport parents name children =
     in
     Maybe.map2 (report parents name) allPoints contents
         |> Maybe.withDefault empty
-
-
-withDots : List String -> List (Element Class Variation msg)
-withDots =
-    List.indexedMap
-        (\n name ->
-            row Unstyled
-                []
-                [ el Unstyled
-                    [ paddingRight 5
-                    , verticalCenter
-                    ]
-                  <|
-                    circle 5
-                        Unstyled
-                        [ inlineStyle [ ( "backgroundColor", Plot.toCss <| Plot.color n ) ] ]
-                        empty
-                , text name
-                ]
-        )
 
 
 report :
@@ -136,7 +115,6 @@ report parents name points tableContents =
                 , paddingTop 10
                 ]
                 tableContents
-            , el Unstyled [ padding 5 ] (html <| Plot.plot points)
             ]
         ]
 
@@ -144,7 +122,7 @@ report parents name points tableContents =
 runsPerSecond : Variation -> Trend Quick -> Element Class Variation msg
 runsPerSecond variation =
     Trend.line
-        >> (\a -> Trend.predictX a Time.second)
+        >> (\a -> Trend.predictX a 1000)
         >> floor
         >> Humanize.int
         >> text
@@ -155,7 +133,7 @@ percentChange : Trend Quick -> Trend Quick -> Element Class Variation msg
 percentChange old new =
     let
         rps =
-            Trend.line >> (\a -> Trend.predictX a Time.second)
+            Trend.line >> (\a -> Trend.predictX a 1000)
 
         change =
             (rps new - rps old) / rps old

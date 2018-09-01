@@ -3,7 +3,7 @@ module Benchmark.Runner.Humanize exposing (int, percent)
 
 int : Int -> String
 int =
-    toString
+    String.fromInt
         >> String.toList
         >> List.reverse
         >> groupsOf 3
@@ -28,5 +28,5 @@ percent =
         >> round
         >> toFloat
         >> (\a -> (/) a 100)
-        >> toString
+        >> String.fromFloat
         >> (\a -> (++) a "%")
