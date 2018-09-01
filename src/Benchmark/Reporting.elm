@@ -1,8 +1,4 @@
-module Benchmark.Reporting
-    exposing
-        ( Report(..)
-        , fromBenchmark
-        )
+module Benchmark.Reporting exposing (Report(..), fromBenchmark)
 
 {-| Reporting for Benchmarks
 

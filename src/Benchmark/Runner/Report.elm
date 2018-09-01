@@ -1,4 +1,4 @@
-module Benchmark.Runner.Report exposing (..)
+module Benchmark.Runner.Report exposing (Class(..), Variation(..), cell, goodnessOfFit, header, multiReport, percentChange, pointsFromStatus, report, reports, runsPerSecond, singleReport, styles, trendFromStatus, trendsFromStatuses, view, withDots)
 
 import Benchmark.Reporting as Reporting exposing (Report(..))
 import Benchmark.Runner.Box as Box
@@ -144,7 +144,7 @@ report parents name points tableContents =
 runsPerSecond : Variation -> Trend Quick -> Element Class Variation msg
 runsPerSecond variation =
     Trend.line
-        >> flip Trend.predictX Time.second
+        >> (\a -> Trend.predictX a Time.second)
         >> floor
         >> Humanize.int
         >> text
@@ -155,7 +155,7 @@ percentChange : Trend Quick -> Trend Quick -> Element Class Variation msg
 percentChange old new =
     let
         rps =
-            Trend.line >> flip Trend.predictX Time.second
+            Trend.line >> (\a -> Trend.predictX a Time.second)
 
         change =
             (rps new - rps old) / rps old
@@ -163,11 +163,13 @@ percentChange old new =
         sign =
             if change > 0 then
                 "+"
+
             else
                 ""
     in
     if old == new then
         cell Numeric (text "-")
+
     else
         Humanize.percent change
             |> (++) sign

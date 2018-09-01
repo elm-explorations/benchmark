@@ -1,12 +1,7 @@
-module Benchmark.LowLevel
-    exposing
-        ( Error(..)
-        , Operation
-        , findSampleSize
-        , operation
-        , sample
-        , warmup
-        )
+module Benchmark.LowLevel exposing
+    ( Operation, operation
+    , warmup, findSampleSize, sample, Error(..)
+    )
 
 {-| Low Level Elm Benchmarking API
 
@@ -104,6 +99,7 @@ warmup operation =
         helper soFar =
             if soFar >= toCollect then
                 Task.succeed ()
+
             else
                 sample sampleSize operation
                     |> Task.map ((+) soFar)
@@ -128,6 +124,7 @@ findSampleSizeWithMinimum minimumRuntime operation =
                     |> Task.sequence
                     |> Task.map (List.minimum >> Maybe.withDefault 0)
                     |> Task.andThen (resample (iteration + 1))
+
             else
                 Task.succeed (sampleSize iteration)
     in
@@ -168,6 +165,7 @@ standardizeSampleSize sampleSize =
         helper rough magnitude =
             if rough > 10 then
                 helper (toFloat rough / 10 |> round) (magnitude * 10)
+
             else
                 rough * magnitude
     in

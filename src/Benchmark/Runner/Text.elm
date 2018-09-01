@@ -1,4 +1,4 @@
-module Benchmark.Runner.Text exposing (..)
+module Benchmark.Runner.Text exposing (Class(..), body, hero, path, styles)
 
 import Color
 import Element exposing (..)

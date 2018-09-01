@@ -1,4 +1,4 @@
-module Example exposing (..)
+module Example exposing (dict, main, match)
 
 import Benchmark exposing (Benchmark)
 import Benchmark.Runner exposing (BenchmarkProgram, program)

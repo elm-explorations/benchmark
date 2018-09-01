@@ -1,13 +1,7 @@
-module Benchmark.Samples
-    exposing
-        ( Point
-        , Samples
-        , count
-        , empty
-        , points
-        , record
-        , trend
-        )
+module Benchmark.Samples exposing
+    ( Samples, empty, record, count
+    , Point, points, trend
+    )
 
 {-| Collect benchmarking runs with their sample size.
 
@@ -125,7 +119,7 @@ pointify : Dict Int (List Time) -> List Point
 pointify samples =
     Dict.foldr
         (\sampleSize values acc ->
-            List.map ((,) (toFloat sampleSize)) values ++ acc
+            List.map (\b -> ( toFloat sampleSize, b )) values ++ acc
         )
         []
         samples

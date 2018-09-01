@@ -1,4 +1,4 @@
-module Benchmark.Benchmark exposing (..)
+module Benchmark.Benchmark exposing (Benchmark(..))
 
 {-| hey, don't publish me please!
 -}

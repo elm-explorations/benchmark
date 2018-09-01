@@ -1,4 +1,4 @@
-module Benchmark.ReportingTest exposing (..)
+module Benchmark.ReportingTest exposing (dummy, error, lazy, report, samples, single, status)
 
 import Benchmark.LowLevel as LowLevel
 import Benchmark.Reporting as Reporting

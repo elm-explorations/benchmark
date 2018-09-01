@@ -1,4 +1,4 @@
-module Benchmark.Runner exposing (BenchmarkProgram, program)
+module Benchmark.Runner exposing (program, BenchmarkProgram)
 
 {-| Browser Benchmark Runner
 

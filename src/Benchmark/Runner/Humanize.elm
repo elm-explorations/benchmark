@@ -27,6 +27,6 @@ percent =
     (*) 10000
         >> round
         >> toFloat
-        >> flip (/) 100
+        >> (\a -> (/) a 100)
         >> toString
-        >> flip (++) "%"
+        >> (\a -> (++) a "%")

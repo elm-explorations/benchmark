@@ -15,7 +15,7 @@ colors =
     List.range 0 8
         |> List.map ((*) (360 // 10))
         |> List.map ((+) 204)
-        |> List.map (flip (%) 360)
+        |> List.map (\a -> (\dividend modulus -> modBy modulus dividend) a 360)
         |> List.map (\deg -> Color.hsl (degrees <| toFloat deg) 0.71 0.61)
 
 
@@ -47,8 +47,8 @@ toCss color =
 
 color : Int -> Color
 color n =
-    (n % List.length colors)
-        |> flip List.drop colors
+    modBy (List.length colors) n
+        |> (\a -> List.drop a colors)
         |> List.head
         |> Maybe.withDefault Color.black
 
@@ -60,7 +60,7 @@ dimCircleForNthClass n =
         |> toCss
         |> viewCircle 4.5
         |> dot
-        |> uncurry
+        |> (\f ( a, b ) -> f a b)
 
 
 circleForNthClass : Int -> Samples.Point -> DataPoint msg
@@ -69,7 +69,7 @@ circleForNthClass n =
         |> toCss
         |> viewCircle 5
         |> dot
-        |> uncurry
+        |> (\f ( a, b ) -> f a b)
 
 
 series : Series (List Class) msg
@@ -107,7 +107,7 @@ plot points =
                             summary
                                 |> decentPositions
                                 |> remove 0
-                                |> List.indexedMap (\n label -> ( n % 3 == 0, label ))
+                                |> List.indexedMap (\n label -> ( modBy 3 n == 0, label ))
                                 |> List.filter Tuple.first
                                 |> List.map Tuple.second
                                 |> List.map simpleLabel

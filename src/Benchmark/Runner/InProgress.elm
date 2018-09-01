@@ -41,7 +41,7 @@ barsWithPath parents children =
     column Unstyled
         [ paddingTop Box.spaceBetweenSections ]
         (Text.path TextClass parents
-            :: List.map (uncurry progressBar) children
+            :: List.map (\( a, b ) -> progressBar a b) children
         )
 
 
@@ -110,6 +110,7 @@ filledPortion name status =
             , attribute "aria-valuemax" "100"
             ]
             (caption name status)
+
     else
         empty
 

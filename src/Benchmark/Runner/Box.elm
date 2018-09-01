@@ -1,4 +1,4 @@
-module Benchmark.Runner.Box exposing (..)
+module Benchmark.Runner.Box exposing (barPaddingX, barPaddingY, spaceBetweenSections, style)
 
 import Color
 import Style exposing (..)

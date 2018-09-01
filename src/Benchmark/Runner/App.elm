@@ -16,6 +16,7 @@ import Style.Sheet as Sheet
 import Task exposing (Task)
 
 
+
 -- MODEL
 
 
@@ -52,6 +53,7 @@ next : Benchmark -> Cmd Msg
 next benchmark =
     if Benchmark.done benchmark then
         Cmd.none
+
     else
         Benchmark.step benchmark
             |> breakForRender
@@ -72,6 +74,7 @@ view model =
                     |> Reporting.fromBenchmark
                     |> Report.view
                     |> Element.mapAll identity ReportClass ReportVariation
+
             else
                 model
                     |> Reporting.fromBenchmark
