@@ -1,4 +1,8 @@
-module Benchmark.Status exposing (Error(..), Status(..), bucketSpacingRatio, numBuckets, progress, samplesPerBucket)
+module Benchmark.Status exposing
+    ( Status(..), progress
+    , Error(..)
+    , numBuckets, samplesPerBucket, bucketSpacingRatio
+    )
 
 {-| Report the status of a Benchmark.
 

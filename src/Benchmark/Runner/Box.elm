@@ -1,6 +1,5 @@
-module Benchmark.Runner.Box exposing (..)
+module Benchmark.Runner.Box exposing (barPaddingX, barPaddingY, spaceBetweenSections, style)
 
-import Color
 import Style exposing (..)
 import Style.Color as Color
 import Style.Font as Font
@@ -24,12 +23,12 @@ barPaddingY =
 
 style : List (Property class variation)
 style =
-    [ Color.background (Color.rgb 248 248 248)
+    [ Color.background (Style.rgb (248 / 255) (248 / 255) (248 / 255))
     , Shadow.box
         { offset = ( 0, 1 )
         , size = 0
         , blur = 2
-        , color = Color.rgba 15 30 45 0.1
+        , color = Style.rgba (15 / 255) (30 / 255) (45 / 255) 0.1
         }
     , Font.size 24
     ]

@@ -1,4 +1,4 @@
-module Benchmark.ReportingTest exposing (..)
+module Benchmark.ReportingTest exposing (dummy)
 
 import Benchmark.LowLevel as LowLevel
 import Benchmark.Reporting as Reporting
@@ -10,12 +10,6 @@ import Fuzz exposing (Fuzzer)
 import Json.Decode as Decode
 import Json.Encode as Encode
 import Test exposing (..)
-import Time
-
-
-lazy : (() -> Fuzzer a) -> Fuzzer a
-lazy fuzzer =
-    Fuzz.andThen fuzzer Fuzz.unit
 
 
 error : Fuzzer Status.Error
@@ -33,8 +27,8 @@ error =
 samples : Fuzzer Samples
 samples =
     Fuzz.map2
-        (\size samples ->
-            List.foldl (Samples.record size) Samples.empty samples
+        (\size samples_ ->
+            List.foldl (Samples.record size) Samples.empty samples_
         )
         Fuzz.int
         (Fuzz.list Fuzz.float)
@@ -62,11 +56,20 @@ single =
 
 report : Fuzzer Reporting.Report
 report =
-    Fuzz.frequency
-        [ ( 2, single )
-        , ( 1, lazy (\_ -> Fuzz.map2 Reporting.Series Fuzz.string (Fuzz.map List.singleton (Fuzz.tuple ( Fuzz.string, status )))) )
-        , ( 1, lazy (\_ -> Fuzz.map2 Reporting.Group Fuzz.string (Fuzz.map List.singleton report)) )
-        ]
+    reportHelp 10
+
+
+reportHelp : Int -> Fuzzer Reporting.Report
+reportHelp depth =
+    if depth > 0 then
+        Fuzz.frequency
+            [ ( 2, single )
+            , ( 1, Fuzz.map2 Reporting.Series Fuzz.string (Fuzz.map List.singleton (Fuzz.tuple ( Fuzz.string, status ))) )
+            , ( 1, Fuzz.map2 Reporting.Group Fuzz.string (Fuzz.map List.singleton (reportHelp (depth - 1))) )
+            ]
+
+    else
+        single
 
 
 

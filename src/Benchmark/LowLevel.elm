@@ -1,12 +1,7 @@
-module Benchmark.LowLevel
-    exposing
-        ( Error(..)
-        , Operation
-        , findSampleSize
-        , operation
-        , sample
-        , warmup
-        )
+module Benchmark.LowLevel exposing
+    ( Operation, operation
+    , warmup, findSampleSize, sample, Error(..)
+    )
 
 {-| Low Level Elm Benchmarking API
 
@@ -32,9 +27,8 @@ and we'll find a way to make your use case friendlier.
 
 -}
 
-import Native.Benchmark
+import Elm.Kernel.Benchmark
 import Task exposing (Task)
-import Time exposing (Time)
 
 
 {-| An operation to benchmark. Use [`operation`](#operation) to
@@ -48,8 +42,8 @@ type Operation
 to benchmark when given a unit (`()`.)
 -}
 operation : (() -> a) -> Operation
-operation =
-    Native.Benchmark.operation
+operation fn =
+    Elm.Kernel.Benchmark.operation fn
 
 
 
@@ -75,9 +69,9 @@ back to
 accurate to 1ms.
 
 -}
-sample : Int -> Operation -> Task Error Time
-sample n operation =
-    Native.Benchmark.sample n operation
+sample : Int -> Operation -> Task Error Float
+sample n operation_ =
+    Elm.Kernel.Benchmark.sample n operation_
 
 
 {-| Warm up the JIT for a benchmarking run. You should call this
@@ -92,10 +86,11 @@ of how this all works.)
 
 -}
 warmup : Operation -> Task Error ()
-warmup operation =
+warmup operation_ =
     let
         toCollect =
-            Time.second
+            -- 1 second
+            1000
 
         sampleSize =
             10000
@@ -104,30 +99,32 @@ warmup operation =
         helper soFar =
             if soFar >= toCollect then
                 Task.succeed ()
+
             else
-                sample sampleSize operation
+                sample sampleSize operation_
                     |> Task.map ((+) soFar)
                     |> Task.andThen helper
     in
     helper 0
 
 
-findSampleSizeWithMinimum : Time -> Operation -> Task Error Int
-findSampleSizeWithMinimum minimumRuntime operation =
+findSampleSizeWithMinimum : Float -> Operation -> Task Error Int
+findSampleSizeWithMinimum minimumRuntime operation_ =
     let
         sampleSize : Int -> Int
         sampleSize i =
             i * 10
 
-        resample : Int -> Time -> Task Error Int
+        resample : Int -> Float -> Task Error Int
         resample iteration total =
             if total < minimumRuntime then
-                sample (sampleSize iteration) operation
+                sample (sampleSize iteration) operation_
                     -- avoid large outliers by taking the lowest of several samples
                     |> List.repeat 3
                     |> Task.sequence
                     |> Task.map (List.minimum >> Maybe.withDefault 0)
                     |> Task.andThen (resample (iteration + 1))
+
             else
                 Task.succeed (sampleSize iteration)
     in
@@ -135,9 +132,10 @@ findSampleSizeWithMinimum minimumRuntime operation =
         |> Task.map standardizeSampleSize
 
 
-defaultMinimum : Time
+defaultMinimum : Float
 defaultMinimum =
-    1 * Time.millisecond
+    -- 1 millisecond
+    1
 
 
 {-| Find an appropriate sample size for benchmarking. This should be
@@ -168,6 +166,7 @@ standardizeSampleSize sampleSize =
         helper rough magnitude =
             if rough > 10 then
                 helper (toFloat rough / 10 |> round) (magnitude * 10)
+
             else
                 rough * magnitude
     in

@@ -5,7 +5,6 @@ import Benchmark.Reporting as Reporting
 import Benchmark.Runner.InProgress as InProgress
 import Benchmark.Runner.Report as Report
 import Benchmark.Runner.Text as Text
-import Color
 import Element exposing (..)
 import Element.Attributes exposing (..)
 import Html exposing (Html)
@@ -16,6 +15,7 @@ import Style.Sheet as Sheet
 import Task exposing (Task)
 
 
+
 -- MODEL
 
 
@@ -23,8 +23,8 @@ type alias Model =
     Benchmark
 
 
-init : Benchmark -> ( Model, Cmd Msg )
-init benchmark =
+init : Benchmark -> () -> ( Model, Cmd Msg )
+init benchmark _ =
     ( benchmark, next benchmark )
 
 
@@ -52,6 +52,7 @@ next : Benchmark -> Cmd Msg
 next benchmark =
     if Benchmark.done benchmark then
         Cmd.none
+
     else
         Benchmark.step benchmark
             |> breakForRender
@@ -72,6 +73,7 @@ view model =
                     |> Reporting.fromBenchmark
                     |> Report.view
                     |> Element.mapAll identity ReportClass ReportVariation
+
             else
                 model
                     |> Reporting.fromBenchmark
@@ -110,7 +112,7 @@ type Variation
 
 styles : List (Style Class Variation)
 styles =
-    [ style Page (Text.body ++ [ Color.background <| Color.rgb 242 242 242 ])
+    [ style Page (Text.body ++ [ Color.background <| Style.rgb (242 / 255) (242 / 255) (242 / 255) ])
     , style Wrapper []
     , InProgress.styles
         |> Sheet.map InProgressClass identity

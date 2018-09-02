@@ -1,4 +1,4 @@
-module Benchmark.Runner exposing (BenchmarkProgram, program)
+module Benchmark.Runner exposing (program, BenchmarkProgram)
 
 {-| Browser Benchmark Runner
 
@@ -8,13 +8,14 @@ module Benchmark.Runner exposing (BenchmarkProgram, program)
 
 import Benchmark exposing (Benchmark)
 import Benchmark.Runner.App as App exposing (Model, Msg)
+import Browser
 import Html
 
 
 {-| A handy type alias for values produced by [`program`](#program)
 -}
 type alias BenchmarkProgram =
-    Program Never Model Msg
+    Program () Model Msg
 
 
 {-| Create a runner program from a benchmark. For example:
@@ -31,7 +32,7 @@ benchmarks.
 -}
 program : Benchmark -> BenchmarkProgram
 program benchmark =
-    Html.program
+    Browser.element
         { init = App.init benchmark
         , update = App.update
         , view = App.view

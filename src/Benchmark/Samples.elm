@@ -1,13 +1,7 @@
-module Benchmark.Samples
-    exposing
-        ( Point
-        , Samples
-        , count
-        , empty
-        , points
-        , record
-        , trend
-        )
+module Benchmark.Samples exposing
+    ( Samples, empty, record, count
+    , Point, points, trend
+    )
 
 {-| Collect benchmarking runs with their sample size.
 
@@ -24,7 +18,6 @@ module Benchmark.Samples
 -}
 
 import Dict exposing (Dict)
-import Time exposing (Time)
 import Trend.Linear exposing (Quick, Trend, line, predictY, quick, robust)
 import Trend.Math as Math exposing (Error)
 
@@ -33,7 +26,7 @@ import Trend.Math as Math exposing (Error)
 gathered.
 -}
 type Samples
-    = Samples (Dict Int (List Time))
+    = Samples (Dict Int (List Float))
 
 
 {-| an empty samples for initializing things
@@ -52,8 +45,8 @@ count (Samples samples) =
 
 {-| Record a new sample
 -}
-record : Int -> Time -> Samples -> Samples
-record sampleSize sample (Samples samples) =
+record : Int -> Float -> Samples -> Samples
+record sampleSize sample (Samples samplesDict) =
     Samples <|
         Dict.update
             sampleSize
@@ -62,10 +55,10 @@ record sampleSize sample (Samples samples) =
                     Nothing ->
                         Just [ sample ]
 
-                    Just samples ->
-                        Just (sample :: samples)
+                    Just samples_ ->
+                        Just (sample :: samples_)
             )
-            samples
+            samplesDict
 
 
 {-| A point representing `(sampleSize, runtime)`.
@@ -74,7 +67,7 @@ type alias Point =
     ( Float, Float )
 
 
-groups : Samples -> ( Dict Int (List Time), Dict Int (List Time) )
+groups : Samples -> ( Dict Int (List Float), Dict Int (List Float) )
 groups (Samples samples) =
     samples
         |> pointify
@@ -121,11 +114,11 @@ points samples =
         |> Tuple.mapSecond pointify
 
 
-pointify : Dict Int (List Time) -> List Point
+pointify : Dict Int (List Float) -> List Point
 pointify samples =
     Dict.foldr
         (\sampleSize values acc ->
-            List.map ((,) (toFloat sampleSize)) values ++ acc
+            List.map (\b -> ( toFloat sampleSize, b )) values ++ acc
         )
         []
         samples

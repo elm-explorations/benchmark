@@ -1,6 +1,5 @@
-module Benchmark.Runner.Text exposing (..)
+module Benchmark.Runner.Text exposing (Class(..), body, hero, path, styles)
 
-import Color
 import Element exposing (..)
 import Element.Attributes exposing (..)
 import Style exposing (..)
@@ -18,7 +17,7 @@ body =
         , font "Arial"
         , sansSerif
         ]
-    , Color.text (Color.rgb 15 30 45)
+    , Color.text (Style.rgb (15 / 255) (30 / 255) (45 / 255))
     ]
 
 

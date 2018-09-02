@@ -1,13 +1,8 @@
-module Benchmark
-    exposing
-        ( Benchmark
-        , benchmark
-        , compare
-        , describe
-        , done
-        , scale
-        , step
-        )
+module Benchmark exposing
+    ( Benchmark
+    , benchmark, compare, scale, describe
+    , step, done
+    )
 
 {-| Benchmark Elm Programs
 
@@ -30,6 +25,7 @@ import Benchmark.LowLevel as LowLevel exposing (Error(..))
 import Benchmark.Samples as Samples exposing (Samples)
 import Benchmark.Status as Status exposing (Status(..))
 import Task exposing (Task)
+
 
 
 -- Benchmarks and Suites
@@ -66,7 +62,7 @@ describe =
 
 {-| Benchmark a single function.
 
-    benchmark "head" (\_ -> List.head [1])
+    benchmark "head" (\_ -> List.head [ 1 ])
 
 The name here should be short and descriptive. Ideally, it should also
 uniquely identify a single benchmark among your whole suite.
@@ -140,7 +136,7 @@ dictionary size, where the size is powers of 10 between 1 and 100,000:
     dictOfSize : Int -> Dict Int ()
     dictOfSize size =
         List.range 0 size
-            |> List.map (flip (,) ())
+            |> List.map (\a -> (\a b -> ( a, b )) a ())
             |> Dict.fromList
 
     dictSize : Benchmark
@@ -189,8 +185,8 @@ The default runner uses this function to find out if it should call
 
 -}
 done : Benchmark -> Bool
-done benchmark =
-    case benchmark of
+done benchmark_ =
+    case benchmark_ of
         Single _ _ status ->
             Status.progress status == 1
 
@@ -288,8 +284,8 @@ they make optimizations and try again for ever higher runs per second.
 
 -}
 step : Benchmark -> Task Never Benchmark
-step benchmark =
-    case benchmark of
+step benchmark_ =
+    case benchmark_ of
         Single name inner status ->
             stepLowLevel inner status
                 |> Task.map (Single name inner)
@@ -297,9 +293,9 @@ step benchmark =
         Series name benchmarks ->
             benchmarks
                 |> List.map
-                    (\( name, inner, status ) ->
+                    (\( name_, inner, status ) ->
                         stepLowLevel inner status
-                            |> Task.map (\status -> ( name, inner, status ))
+                            |> Task.map (\status_ -> ( name_, inner, status_ ))
                     )
                 |> Task.sequence
                 |> Task.map (Series name)
@@ -332,7 +328,7 @@ stepLowLevel operation status =
         Pending baseSampleSize samples ->
             let
                 sampleSize =
-                    baseSampleSize * (Status.bucketSpacingRatio * (Samples.count samples % Status.numBuckets) + 1)
+                    baseSampleSize * (Status.bucketSpacingRatio * modBy Status.numBuckets (Samples.count samples) + 1)
             in
             LowLevel.sample sampleSize operation
                 |> Task.map
@@ -343,6 +339,7 @@ stepLowLevel operation status =
                         in
                         if Samples.count newSamples >= (Status.numBuckets * Status.samplesPerBucket) then
                             finalize newSamples
+
                         else
                             Pending baseSampleSize newSamples
                     )

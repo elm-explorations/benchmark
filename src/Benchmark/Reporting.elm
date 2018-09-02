@@ -1,8 +1,4 @@
-module Benchmark.Reporting
-    exposing
-        ( Report(..)
-        , fromBenchmark
-        )
+module Benchmark.Reporting exposing (Report(..), fromBenchmark)
 
 {-| Reporting for Benchmarks
 
@@ -40,7 +36,7 @@ fromBenchmark internal =
 
         Benchmark.Series name benchmarks ->
             benchmarks
-                |> List.map (\( name, _, status ) -> ( name, status ))
+                |> List.map (\( childName, _, status ) -> ( childName, status ))
                 |> Series name
 
         Benchmark.Group name benchmarks ->
