@@ -71,9 +71,9 @@ This is necessary because of how `elm-package` works; it may change in the futur
 Here are the commands (with explanation) that you should run to get started:
 
 ```sh
-mkdir benchmarks                             # create a benchmarks directory
-cd benchmarks                                # go into that directory
-elm package install BrianHicks/elm-benchmark # get this project, including the browser runner
+mkdir benchmarks                       # create a benchmarks directory
+cd benchmarks                          # go into that directory
+elm install elm-explorations/benchmark # get this project, including the browser runner
 ```
 
 You'll also need to add your main source directory (probably `../` or `../src`) to the `source-directories` list in `benchmarks/elm-package.json`.
