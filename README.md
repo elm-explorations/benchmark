@@ -72,7 +72,6 @@ Here are the commands (with explanation) that you should run to get started:
 
 ```sh
 mkdir benchmarks                       # create a benchmarks directory
-cd benchmarks                          # go into that directory
 elm install elm-explorations/benchmark # get this project, including the browser runner
 ```
 
