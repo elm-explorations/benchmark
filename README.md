@@ -1,6 +1,6 @@
 # Elm Benchmark
 
-[![Build Status](https://travis-ci.org/BrianHicks/elm-benchmark.svg?branch=master)](https://travis-ci.org/BrianHicks/elm-benchmark)
+[![Build Status](https://travis-ci.org/elm-explorations/benchmark.svg?branch=master)](https://travis-ci.org/BrianHicks/elm-benchmark)
 
 Run microbenchmarks in Elm.
 
@@ -62,18 +62,19 @@ This code uses a few common functions:
 - `benchmark` to run benchmarks
 - `compare` to compare the results of two benchmarks
 
-For a more thorough overview, I've written an [introduction to elm-benchmark](https://www.brianthicks.com/post/2017/02/27/introducing-elm-benchmark/).
+For a more thorough overview, I wrote an [introduction to elm-benchmark](https://www.brianthicks.com/post/2017/02/27/introducing-elm-benchmark/).
+Please note that the article was written for a previous version so some details may have changed slightly.
 
 ### Installing
 
-You should keep your benchmarks separate from your code since you don't want the elm-benchmark code in your production artifacts.
-This is necessary because of how `elm-package` works; it may change in the future.
+You should keep your benchmarks separate from your code since you don't want the benchmark code in your production artifacts.
+This is necessary because of how `elm make` works; it may change in the future.
 Here are the commands (with explanation) that you should run to get started:
 
 ```sh
 mkdir benchmarks                             # create a benchmarks directory
 cd benchmarks                                # go into that directory
-elm package install BrianHicks/elm-benchmark # get this project, including the browser runner
+elm install elm-explorations/benchmark       # get this project, including the browser runner
 ```
 
 You'll also need to add your main source directory (probably `../` or `../src`) to the `source-directories` list in `benchmarks/elm-package.json`.
@@ -109,16 +110,16 @@ Some general principles:
 
 Goodness of fit is a measurement of how well our prediction fits the measurements we have collected.
 You want this to be as close to 100% as possible.
-In elm-benchmark:
+In benchmark:
 
 - 99% is great
 - 95% is okay
 - 90% is not great, consider closing other programs on your computer and re-running
 - 80% and below, the result has been highly affected by outliers.
   Please do not trust the results when goodness of fit is this low.
-  
-elm-benchmark will eventually incorporate this advice into the reporting interface.
-See [Issue #13](https://github.com/BrianHicks/elm-benchmark/issues/13).
+
+benchmark will eventually incorporate this advice into the reporting interface.
+See [Issue #4](https://github.com/elm-explorations/benchmark/issues/4).
 
 For more, see [Wikipedia: Goodness of Fit](https://en.wikipedia.org/wiki/Goodness_of_fit).
 
@@ -155,4 +156,4 @@ It sets a more even playing field for all the benchmarks, and gives us better da
 
 ## License
 
-elm-benchmark is licensed under a 3-Clause BSD License.
+benchmark is licensed under a 3-Clause BSD License.
