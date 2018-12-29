@@ -24,11 +24,10 @@ Run microbenchmarks in Elm.
 
 ## Quick Start
 
-Here's a sample, benchmarking [`Array.Hamt`](http://package.elm-lang.org/packages/Skinney/elm-array-exploration/latest).
+Here's a sample, benchmarking [`Array`](https://package.elm-lang.org/packages/elm/core/latest/Array).
 
 ```elm
 import Array
-import Arry.Hamt as Hamt
 import Benchmark exposing (..)
 
 
@@ -36,9 +35,9 @@ suite : Benchmark
 suite =
     let
         sampleArray =
-            Hamt.initialize 100 identity
+            Array.initialize 100 identity
     in
-    describe "Array.Hamt"
+    describe "Array"
         [ -- nest as many descriptions as you like
           describe "slice"
             [ benchmark "from the beginning" <|
@@ -46,13 +45,6 @@ suite =
             , benchmark "from the end" <|
                 \_ -> Hamt.slice 0 50 sampleArray
             ]
-
-        -- compare the results of two benchmarks
-        , Benchmark.compare "initialize"
-            "HAMT"
-            (\_ -> Hamt.initialize 100 identity)
-            "core"
-            (\_ -> Array.initialize 100 identity)
         ]
 ```
 
@@ -60,7 +52,6 @@ This code uses a few common functions:
 
 - `describe` to organize benchmarks
 - `benchmark` to run benchmarks
-- `compare` to compare the results of two benchmarks
 
 For a more thorough overview, I wrote an [introduction to elm-benchmark](https://www.brianthicks.com/post/2017/02/27/introducing-elm-benchmark/).
 Please note that the article was written for a previous version so some details may have changed slightly.
