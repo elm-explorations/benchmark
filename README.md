@@ -35,9 +35,9 @@ suite =
         [ -- nest as many descriptions as you like
           describe "slice"
             [ benchmark "from the beginning" <|
-                \_ -> Hamt.slice 50 100 sampleArray
+                \_ -> Array.slice 50 100 sampleArray
             , benchmark "from the end" <|
-                \_ -> Hamt.slice 0 50 sampleArray
+                \_ -> Array.slice 0 50 sampleArray
             ]
         ]
 ```
