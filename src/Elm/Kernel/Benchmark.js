@@ -19,13 +19,9 @@ var _Benchmark_sample = F2(function(n, fn) {
       }
     } catch (error) {
       if (error instanceof RangeError) {
-        callback(__Scheduler_fail(
-          __BL_StackOverflow
-        ));
+        callback(__Scheduler_fail(__BL_StackOverflow));
       } else {
-        callback(__Scheduler_fail(
-          __BL_UnknownError(error.message)
-        ));
+        callback(__Scheduler_fail(__BL_UnknownError(error.message)));
       }
       return;
     }

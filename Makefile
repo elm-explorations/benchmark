@@ -1,19 +1,11 @@
 ELM_FILES = $(shell find src -name '*.elm' -or -name '*.js')
 NPM_BIN = $(shell npm bin)
-ELM = env PATH=${NPM_BIN}:${PATH} elm
+ELM = env PATH=${NPM_BIN}:"${PATH}" elm
 
 .PHONY: all
 all: documentation.json test examples/Example.elm.html flow
 
 # package management
-
-elm-stuff: elm-package.json node_modules
-	${ELM} package install --yes
-	touch -m $@
-
-%elm-stuff: elm-package.json node_modules
-	cd $(@D); ${ELM} package install --yes
-	touch -m $@
 
 node_modules: package.json
 	npm install
@@ -21,17 +13,19 @@ node_modules: package.json
 
 # Elm
 
-documentation.json: ${ELM_FILES} elm-package.json node_modules
-	${ELM} make --yes --warn --docs=$@
+documentation.json: ${ELM_FILES} elm.json node_modules
+	${ELM} make --docs=$@
 
 .PHONY: test
-test: tests/elm-stuff node_modules
-	${ELM} test
+test: node_modules
+	echo "Tests cannot be run due to kernal code" && exit 1
+	# ${ELM}-test
 
-examples/%.html: examples/% examples/elm-stuff ${ELM_FILES} node_modules
-	cd examples; ${ELM} make --warn --yes --output $(shell basename $@) $(shell basename $<)
+examples/%.html: examples/% ${ELM_FILES} node_modules
+	echo "examples cannot be run due to kernal code" && exit 1
+	# cd examples; ${ELM} make --output $(shell basename $@) $(shell basename $<)
 
-# CLI
+# JavaScript
 
 .PHONY: flow
 flow: node_modules
@@ -41,8 +35,8 @@ flow: node_modules
 
 .PHONY: check-formatting
 check-formatting: node_modules
-	${ELM} format --validate $(shell find src tests -name '*.elm' -not -path '*elm-stuff*')
-	${NPM_BIN}/prettier -l $(shell find src cli -name '*.js')
+	${ELM}-format --validate $(shell find src tests -name '*.elm' -not -path '*elm-stuff*')
+	${NPM_BIN}/prettier -l $(shell find src -name '*.js')
 
 # Meta
 
