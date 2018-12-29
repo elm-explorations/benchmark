@@ -1,9 +1,7 @@
 ELM_FILES = $(shell find src -name '*.elm' -or -name '*.js')
-NPM_BIN = $(shell npm bin)
-ELM = env PATH=${NPM_BIN}:"${PATH}" elm
 
 .PHONY: all
-all: documentation.json test examples/Example.elm.html flow
+all: documentation.json flow check-formatting
 
 # package management
 
@@ -14,29 +12,29 @@ node_modules: package.json
 # Elm
 
 documentation.json: ${ELM_FILES} elm.json node_modules
-	${ELM} make --docs=$@
+	npx elm make --docs=$@
 
 .PHONY: test
 test: node_modules
 	echo "Tests cannot be run due to kernel code" && exit 1
-	# ${ELM}-test
+	# npx elm-test
 
 examples/%.html: examples/% ${ELM_FILES} node_modules
 	echo "examples cannot be run due to kernel code" && exit 1
-	# cd examples; ${ELM} make --output $(shell basename $@) $(shell basename $<)
+	# cd examples; npx elm make --output ${@F} ${<F}
 
 # JavaScript
 
 .PHONY: flow
 flow: node_modules
-	${NPM_BIN}/flow
+	npx flow check src
 
 # Linting
 
 .PHONY: check-formatting
 check-formatting: node_modules
-	${ELM}-format --validate $(shell find src tests -name '*.elm' -not -path '*elm-stuff*')
-	${NPM_BIN}/prettier -l $(shell find src -name '*.js')
+	npx elm-format --validate $(shell find src tests -name '*.elm')
+	npx prettier -l $(shell find src -name '*.js')
 
 # Meta
 
