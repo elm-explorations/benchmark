@@ -4,7 +4,6 @@
 
 Run microbenchmarks in Elm.
 
-<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table of Contents**
 
 - [Elm Benchmark](#elm-benchmark)
@@ -14,13 +13,10 @@ Run microbenchmarks in Elm.
     - [Writing Effective Benchmarks](#writing-effective-benchmarks)
     - [FAQ](#faq)
         - [What Does Goodness of Fit Mean?](#what-does-goodness-of-fit-mean)
-        - [Why Are My Benchmarks Run In Parallel?](#why-are-my-benchmarks-run-in-parallel)
+        - [Why Are My Benchmarks Running In Parallel?](#why-are-my-benchmarks-running-in-parallel)
         - [How Are My Benchmarks Measured?](#how-are-my-benchmarks-measured)
     - [Inspirations and Thanks](#inspirations-and-thanks)
     - [License](#license)
-
-<!-- markdown-toc end -->
-
 
 ## Quick Start
 
