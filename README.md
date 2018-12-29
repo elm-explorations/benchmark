@@ -54,8 +54,6 @@ Please note that the article was written for a previous version so some details 
 
 ### Installing
 
-You should keep your benchmarks separate from your code since you don't want the benchmark code in your production artifacts.
-This is necessary because of how `elm make` works; it may change in the future.
 Here are the commands (with explanation) that you should run to get started:
 
 ```sh
@@ -63,8 +61,7 @@ mkdir benchmarks                       # create a benchmarks directory
 elm install elm-explorations/benchmark # get this project, including the browser runner
 ```
 
-You'll also need to add your main source directory (probably `../` or `../src`) to the `source-directories` list in `benchmarks/elm-package.json`.
-If you don't do this, you won't be able to import the code you're benchmarking!
+Then add your benchmarks in `benchmark/YourBenchmarkName.elm`
 
 ### Running Benchmarks in the Browser
 
