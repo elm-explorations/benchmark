@@ -1,7 +1,5 @@
 # Elm Benchmark
 
-[![Build Status](https://travis-ci.org/elm-explorations/benchmark.svg?branch=master)](https://travis-ci.org/BrianHicks/elm-benchmark)
-
 Run microbenchmarks in Elm.
 
 **Table of Contents**
