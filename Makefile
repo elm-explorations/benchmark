@@ -18,11 +18,11 @@ documentation.json: ${ELM_FILES} elm.json node_modules
 
 .PHONY: test
 test: node_modules
-	echo "Tests cannot be run due to kernal code" && exit 1
+	echo "Tests cannot be run due to kernel code" && exit 1
 	# ${ELM}-test
 
 examples/%.html: examples/% ${ELM_FILES} node_modules
-	echo "examples cannot be run due to kernal code" && exit 1
+	echo "examples cannot be run due to kernel code" && exit 1
 	# cd examples; ${ELM} make --output $(shell basename $@) $(shell basename $<)
 
 # JavaScript
