@@ -17,7 +17,7 @@
         "elm/browser": "1.0.0 <= v < 2.0.0",
         "elm/core": "1.0.0 <= v < 2.0.0",
         "elm/html": "1.0.0 <= v < 2.0.0",
-        "mdgriffith/style-elements": "5.0.0 <= v < 6.0.0"
+        "mdgriffith/style-elements": "5.0.2 <= v < 6.0.0"
     },
     "test-dependencies": {
         "elm-explorations/test": "1.0.0 <= v < 2.0.0"
