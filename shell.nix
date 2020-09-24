@@ -1,15 +1,7 @@
-with import (builtins.fetchTarball rec {
-  # grab a hash from here: https://nixos.org/channels/
-  name = "nixpkgs-darwin-18.09pre153253.7e88992a8c7";
-  url = "https://github.com/nixos/nixpkgs/archive/7e88992a8c7b2de0bcb89182d8686b27bd93e46a.tar.gz";
-  # Hash obtained using `nix-prefetch-url --unpack <url>`
-  sha256 = "1f6lf4addczi81hchqbzjlhrsmkrj575dmdjdhyl0jkm7ypy2lgk";
-}) {};
-
-stdenv.mkDerivation {
-  name = "benchmark";
-  buildInputs = [
-    git
-    nodePackages.npm
-  ];
-}
+{ ... }:
+let
+  sources = import ./nix/sources.nix;
+  nixpkgs = import sources.nixpkgs { };
+  niv = import sources.niv { };
+in with nixpkgs;
+mkShell { buildInputs = [ niv.niv git nodejs nodePackages.npm ]; }
